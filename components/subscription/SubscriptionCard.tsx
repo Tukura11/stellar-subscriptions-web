@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { describeInterval } from "@/lib/format";
 import { AddressLink } from "@/components/ui/AddressLink";
 import { TokenAmount } from "@/components/ui/TokenAmount";
@@ -16,8 +17,10 @@ import { SubStatusBadge } from "./SubStatusBadge";
  * card itself, so stopping a subscription is never more than one click away.
  */
 export function SubscriptionCard({ sub, onChanged }: { sub: Subscription; onChanged: () => void }) {
+  const t = useTranslations("SubscriptionCard");
+
   return (
-    <article className="card space-y-5 p-5" aria-label={`Subscription ${sub.id}`}>
+    <article className="card space-y-5 p-5" aria-label={t("ariaLabel", { id: sub.id })}>
       <header className="flex flex-wrap items-start justify-between gap-3">
         <div className="space-y-1">
           <h3 className="text-lg font-semibold text-fg">
@@ -25,17 +28,17 @@ export function SubscriptionCard({ sub, onChanged }: { sub: Subscription; onChan
             <span className="ml-2 text-sm font-normal text-muted">{describeInterval(sub.intervalLedgers)}</span>
           </h3>
           <p className="text-sm text-muted">
-            to <AddressLink address={sub.merchant} />
+            {t("to")} <AddressLink address={sub.merchant} />
             {sub.planId > 0 && (
               <>
                 {" "}
                 ·{" "}
                 <Link href={`/plans/${sub.planId}`} className="hover:text-fg hover:underline">
-                  plan #{sub.planId}
+                  {t("plan", { id: sub.planId })}
                 </Link>
               </>
             )}
-            <span> · subscription #{sub.id}</span>
+            <span> · {t("subscription", { id: sub.id })}</span>
           </p>
         </div>
         <SubStatusBadge status={sub.status} />

@@ -134,6 +134,21 @@ export function approxDuration(ledgers: number): string {
 }
 
 /**
+ * An estimated wall-clock date for a ledger difference, in the user's local
+ * time zone. Ledgers close at roughly five seconds each, so the result is
+ * always approximate and callers must label it as an estimate.
+ *
+ * `formatEstimatedDate(17_280)` → `"Jan 2, 2025, 3:45 PM"` (local time).
+ */
+export function formatEstimatedDate(ledgers: number, from: Date = new Date()): string {
+  const target = new Date(from.getTime() + Math.max(0, ledgers) * LEDGER_SECONDS * 1000);
+  return new Intl.DateTimeFormat(LOCALE, {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(target);
+}
+
+/**
  * How often a plan bills, in plain words: "every hour", "every day", or
  * "about every 3 days 4 hours" for intervals that are not a preset.
  */
